@@ -5,6 +5,18 @@ import scipy.io.wavfile as wav
 import os
 import time
 
+
+# -------- XTTS SAFE ADVANCED EMOTION ENGINE ----------
+EMOTION_STYLES = {
+    "friendly": {"speed": 1.0},
+    "angry": {"speed": 1.3},
+    "storytelling": {"speed": 0.85},
+    "calm": {"speed": 0.75},
+    "robot": {"speed": 1.05}
+}
+
+
+
 # ---------------- CONFIG ---------------- #
 st.set_page_config(page_title="Chatterbox AI Voice Cloner", layout="wide")
 
@@ -41,11 +53,34 @@ tab1, tab2 = st.tabs(["📝 Text → Voice", "🎤 Speech → Voice"])
 
 # ============= TAB 1 : TEXT TO VOICE ============= #
 with tab1:
-    st.subheader("Type Text & Generate Cloned Voice")
+    st.header("Text → Voice")
 
-    text_input = st.text_area("Enter your text", height=150)
+    text_input = st.text_area("Enter text to speak", height=200)
 
-    if st.button("🚀 Generate Voice"):
+    # ✅ ✅ ✅ PASTE HERE (ADVANCED EMOTION UI STARTS HERE)
+    st.subheader("🎭 Advanced Emotion Controls")
+
+    emotion = st.selectbox(
+       "Select Voice Emotion",
+       list(EMOTION_STYLES.keys())
+   )
+
+    emotion_strength = st.slider(
+        "Emotion Strength",
+        0.5, 2.0, 1.0
+   )
+
+    speed = st.slider(
+        "Speech Speed",
+        0.5, 1.6,
+    EMOTION_STYLES[emotion]["speed"]
+)
+
+    # ✅ ✅ ✅ PASTE ENDS HERE
+
+    if st.button("🎙 Speak Text"):
+        # your TTS code here
+
         if not voice_sample:
             st.error("❌ Please upload a reference voice!")
         elif text_input.strip() == "":
@@ -54,11 +89,14 @@ with tab1:
             with st.spinner("Cloning Voice... Please wait"):
                 output_path = "output/cloned_voice.wav"
                 tts.tts_to_file(
-                     text=text_input,
-                        speaker_wav="voices/reference.wav",
-                        file_path=output_path,
-                        language="en"
-                )
+                    text=text_input,
+                    speaker_wav="voices/reference.wav",
+                    file_path=output_path,
+                    language="hi",
+                    speed=speed * emotion_strength
+          )
+
+
                 time.sleep(1)
 
             st.success("✅ Voice Generated Successfully!")
@@ -92,14 +130,16 @@ with tab2:
                 with st.spinner("Cloning Your Voice..."):
                     output_path = "output/speech_clone.wav"
                     tts.tts_to_file(
-                        text=text_input,
-                        speaker_wav="voices/reference.wav",
-                        file_path=output_path,
-                        language="en"
-                     
+                       text=text_input,
+                       speaker_wav="voices/reference.wav",
+                       file_path=output_path,
+                       language="hi",
+                       speed=speed * emotion_strength
+ )
+                   
 
-                    )
-                    time.sleep(1)
+                    
+                time.sleep(1)
 
                 st.success("✅ Speech Converted Successfully!")
                 st.audio(output_path)
@@ -109,3 +149,7 @@ with tab2:
 st.markdown("---")
 st.markdown("✅ Built with **Python + Streamlit + Chatterbox TTS AI**")
 st.markdown("🚀 Professional AI Voice Cloning System")
+
+
+# -------- ADVANCED EMOTION ENGINE ----------
+
