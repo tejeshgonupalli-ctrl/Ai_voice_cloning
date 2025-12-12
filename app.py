@@ -92,7 +92,7 @@ with tab1:
                     text=text_input,
                     speaker_wav="voices/reference.wav",
                     file_path=output_path,
-                    language="hi",
+                    language="en",
                     speed=speed * emotion_strength
           )
 
@@ -133,7 +133,7 @@ with tab2:
                        text=text_input,
                        speaker_wav="voices/reference.wav",
                        file_path=output_path,
-                       language="hi",
+                       language="en",
                        speed=speed * emotion_strength
  )
                    
